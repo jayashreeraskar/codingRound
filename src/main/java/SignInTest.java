@@ -50,7 +50,7 @@ DesiredCapabilities dc;
         driver.quit();
     }
 
-    private void waitFor(int durationInMilliSeconds) {
+    void waitFor(int durationInMilliSeconds) {
         try {
             Thread.sleep(durationInMilliSeconds);
         } catch (InterruptedException e) {
@@ -59,7 +59,7 @@ DesiredCapabilities dc;
     }
 
     @SuppressWarnings("restriction")
-	private void setDriverPath() {
+	public void setDriverPath() {
         if (PlatformUtil.isMac()) {
             System.setProperty("webdriver.chrome.driver", "chromewebdriver");
         }
@@ -71,7 +71,7 @@ DesiredCapabilities dc;
         }
     }
 
-    private  DesiredCapabilities getDriver()
+    public  DesiredCapabilities getDriver()
     {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-popup-blocking");

@@ -14,6 +14,7 @@ public class HotelBookingTest {
 
 	WebDriver driver;
 	DesiredCapabilities dc;
+	SignInTest test=new SignInTest();
 
 	@FindBy(xpath = "//a[text()='Hotels']")
 	private WebElement hotelLink;
@@ -27,10 +28,11 @@ public class HotelBookingTest {
 	@FindBy(id = "travellersOnhome")
 	private WebElement travellerSelection;
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void shouldBeAbleToSearchForHotels() {
-		dc = getDriver();
-		setDriverPath();
+		dc = test.getDriver();
+		test.setDriverPath();
 		driver = new ChromeDriver(dc);
 		PageFactory.initElements(driver,this);
 
@@ -45,28 +47,6 @@ public class HotelBookingTest {
 		searchButton.click();
 
 		driver.quit();
-
-	}
-
-	private void setDriverPath() {
-		if (PlatformUtil.isMac()) {
-			System.setProperty("webdriver.chrome.driver", "chromedriver");
-		}
-		if (PlatformUtil.isWindows()) {
-			System.setProperty("webdriver.chrome.driver", "webchromedriver.exe");
-		}
-		if (PlatformUtil.isLinux()) {
-			System.setProperty("webdriver.chrome.driver", "chromedriver_linux");
-		}
-	}
-
-	private DesiredCapabilities getDriver() {
-		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--disable-popup-blocking");
-		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setCapability(ChromeOptions.CAPABILITY, options);
-
-		return capabilities;
 
 	}
 

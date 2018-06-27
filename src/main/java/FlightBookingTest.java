@@ -17,17 +17,17 @@ public class FlightBookingTest {
 
 	WebDriver driver;
 	DesiredCapabilities dc;
-
+	SignInTest test =new SignInTest();
 	@Test
 	public void testThatResultsAppearForAOneWayJourney() {
 
-		dc = getDriver();
-		setDriverPath();
+		dc = test.getDriver();
+		test.setDriverPath();
 		driver = new ChromeDriver(dc);
 		driver.get("https://www.cleartrip.com/");
 		driver.manage().window().maximize();
 
-		waitFor(2000);
+		test.waitFor(2000);
 		driver.findElement(By.id("OneWay")).click();
 
 		driver.findElement(By.id("FromTag")).clear();
@@ -35,7 +35,7 @@ public class FlightBookingTest {
 
 		// wait for the auto complete options to appear for the origin
 
-		waitFor(2000);
+		test.waitFor(2000);
 		List<WebElement> originOptions = driver.findElement(By.id("ui-id-1"))
 				.findElements(By.tagName("li"));
 		originOptions.get(0).click();
@@ -44,7 +44,7 @@ public class FlightBookingTest {
 
 		// wait for the auto complete options to appear for the destination
 
-		waitFor(2000);
+		test.waitFor(2000);
 		// select the first item from the destination auto complete list
 		List<WebElement> destinationOptions = driver.findElement(
 				By.id("ui-id-2")).findElements(By.tagName("li"));
@@ -57,22 +57,13 @@ public class FlightBookingTest {
 		// all fields filled in. Now click on search
 		driver.findElement(By.id("SearchBtn")).click();
 
-		waitFor(5000);
+		test.waitFor(5000);
 		// verify that result appears for the provided journey search
 		Assert.assertTrue(isElementPresent(By.className("searchSummary")));
 
 		// close the browser
 		driver.quit();
 
-	}
-
-	private void waitFor(int durationInMilliSeconds) {
-		try {
-			Thread.sleep(durationInMilliSeconds);
-		} catch (InterruptedException e) {
-			e.printStackTrace(); // To change body of catch statement use File |
-									// Settings | File Templates.
-		}
 	}
 
 	private boolean isElementPresent(By by) {
@@ -84,26 +75,4 @@ public class FlightBookingTest {
 		}
 	}
 
-	private DesiredCapabilities getDriver() {
-		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--disable-popup-blocking");
-		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setCapability(ChromeOptions.CAPABILITY, options);
-
-		return capabilities;
-
-	}
-
-	@SuppressWarnings("restriction")
-	private void setDriverPath() {
-		if (PlatformUtil.isMac()) {
-			System.setProperty("webdriver.chrome.driver", "chromedriver");
-		}
-		if (PlatformUtil.isWindows()) {
-			System.setProperty("webdriver.chrome.driver", "webchromedriver.exe");
-		}
-		if (PlatformUtil.isLinux()) {
-			System.setProperty("webdriver.chrome.driver", "chromedriver_linux");
-		}
-	}
 }
