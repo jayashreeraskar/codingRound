@@ -1,53 +1,73 @@
 import com.sun.javafx.PlatformUtil;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.Test;
 
 public class HotelBookingTest {
 
-    WebDriver driver = new ChromeDriver();
+	WebDriver driver;
+	DesiredCapabilities dc;
 
-    @FindBy(linkText = "Hotels")
-    private WebElement hotelLink;
+	@FindBy(xpath = "//a[text()='Hotels']")
+	private WebElement hotelLink;
 
-    @FindBy(id = "Tags")
-    private WebElement localityTextBox;
+	@FindBy(id = "Tags")
+	private WebElement localityTextBox;
 
-    @FindBy(id = "SearchHotelsButton")
-    private WebElement searchButton;
+	@FindBy(id = "SearchHotelsButton")
+	private WebElement searchButton;
 
-    @FindBy(id = "travellersOnhome")
-    private WebElement travellerSelection;
+	@FindBy(id = "travellersOnhome")
+	private WebElement travellerSelection;
 
-    @Test
-    public void shouldBeAbleToSearchForHotels() {
-        setDriverPath();
+	@Test
+	public void shouldBeAbleToSearchForHotels() {
+		dc = getDriver();
+		setDriverPath();
+		driver = new ChromeDriver(dc);
+		PageFactory.initElements(driver,this);
 
-        driver.get("https://www.cleartrip.com/");
-        hotelLink.click();
+		driver.get("https://www.cleartrip.com/");
+		driver.manage().window().maximize();
 
-        localityTextBox.sendKeys("Indiranagar, Bangalore");
+		hotelLink.click();
 
-        new Select(travellerSelection).selectByVisibleText("1 room, 2 adults");
-        searchButton.click();
+		localityTextBox.sendKeys("Indiranagar, Bangalore");
 
-        driver.quit();
+		new Select(travellerSelection).selectByVisibleText("1 room, 2 adults");
+		searchButton.click();
 
-    }
+		driver.quit();
 
-    private void setDriverPath() {
-        if (PlatformUtil.isMac()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver");
-        }
-        if (PlatformUtil.isWindows()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
-        }
-        if (PlatformUtil.isLinux()) {
-            System.setProperty("webdriver.chrome.driver", "chromedriver_linux");
-        }
-    }
+	}
+
+	private void setDriverPath() {
+		if (PlatformUtil.isMac()) {
+			System.setProperty("webdriver.chrome.driver", "chromedriver");
+		}
+		if (PlatformUtil.isWindows()) {
+			System.setProperty("webdriver.chrome.driver", "webchromedriver.exe");
+		}
+		if (PlatformUtil.isLinux()) {
+			System.setProperty("webdriver.chrome.driver", "chromedriver_linux");
+		}
+	}
+
+	private DesiredCapabilities getDriver() {
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--disable-popup-blocking");
+		DesiredCapabilities capabilities = new DesiredCapabilities();
+		capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+
+		return capabilities;
+
+	}
 
 }
